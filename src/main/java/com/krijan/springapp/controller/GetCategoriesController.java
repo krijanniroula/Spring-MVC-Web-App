@@ -46,6 +46,22 @@ public class GetCategoriesController {
 		JSONArray arr = (JSONArray) json.get("keyword");
 		System.out.println(arr);
 	}
+	
+	@PostMapping(value="/getDistrictCategories")
+	public void method3(@RequestBody String getKeys) {
+		
+		JSONObject json = JSONObject.fromObject(getKeys);
+		JSONArray arr = (JSONArray) json.get("keyword");
+		System.out.println(arr);
+	}
+	
+	@PostMapping(value="/getBothCategories")
+	public void method5(@RequestBody String getKeys) {
+		
+		JSONObject json = JSONObject.fromObject(getKeys);
+		JSONArray arr = (JSONArray) json.get("keyword");
+		System.out.println(arr);
+	}
 
 	@GetMapping(value = "/getZoneCategories", produces = "application/json")
 	public ZoneResponseBody method5() {
