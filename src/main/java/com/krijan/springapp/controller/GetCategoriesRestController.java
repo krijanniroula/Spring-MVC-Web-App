@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,14 +22,15 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 @RestController
-public class GetCategoriesController {
-
+public class GetCategoriesRestController {
+	
 	@Autowired
 	ZoneInterface zoneInterface;
 	
 	@Autowired
 	DistrictInterface districtInterface;
-
+	
+	
 	@RequestMapping("/spring-app")
 	public ModelAndView method1() {
 
@@ -39,84 +38,97 @@ public class GetCategoriesController {
 		return model;
 	}
 	
-	@PostMapping(value="/getZoneCategories")
-	public void method2(@RequestBody String getKeys) {
-		
+
+	@PostMapping(value = "/getZoneCategories")
+	public ZoneResponseBody method2(@RequestBody String getKeys) {
+
 		JSONObject json = JSONObject.fromObject(getKeys);
 		JSONArray arr = (JSONArray) json.get("keyword");
 		System.out.println(arr);
-	}
-	
-	@PostMapping(value="/getDistrictCategories")
-	public void method3(@RequestBody String getKeys) {
-		
-		JSONObject json = JSONObject.fromObject(getKeys);
-		JSONArray arr = (JSONArray) json.get("keyword");
-		System.out.println(arr);
-	}
-	
-	@PostMapping(value="/getBothCategories")
-	public void method5(@RequestBody String getKeys) {
-		
-		JSONObject json = JSONObject.fromObject(getKeys);
-		JSONArray arr = (JSONArray) json.get("keyword");
-		System.out.println(arr);
+
+		if (arr.toString().equals("[\"zone\"]")) {
+
+			return ZoneResponseResult();
+		} else {
+			return null;
+		}
 	}
 
-	@GetMapping(value = "/getZoneCategories", produces = "application/json")
-	public ZoneResponseBody method5() {
-		
+	@PostMapping(value = "/getDistrictCategories")
+	public DistrictResponseBody method3(@RequestBody String getKeys) {
+
+		JSONObject json = JSONObject.fromObject(getKeys);
+		JSONArray arr = (JSONArray) json.get("keyword");
+		System.out.println(arr);
+
+		if (arr.toString().equals("[\"district\"]")) {
+
+			return DistrictResponseResult();
+		} else {
+			return null;
+		}
+	}
+
+	@PostMapping(value = "/getBothCategories")
+	public BothResponseBody method4(@RequestBody String getKeys) {
+
+		JSONObject json = JSONObject.fromObject(getKeys);
+		JSONArray arr = (JSONArray) json.get("keyword");
+		System.out.println(arr);
+
+		if (arr.toString().equals("[\"zone\",\"district\"]")) {
+			BothResponseBody bothResponseBody = new BothResponseBody();
+			JSONObject obj = new JSONObject();
+			JSONObject obj1 = new JSONObject();
+
+			obj.put("zone", ZoneResponseResult().getJsonArray());
+			obj1.put("district", DistrictResponseResult().getJsonArray());
+
+			List<JSONObject> list2 = new ArrayList<>();
+
+			list2.add(obj);
+			list2.add(obj1);
+
+			bothResponseBody.setJsonObject(list2);
+
+			return bothResponseBody;
+
+		} else {
+			return null;
+		}
+	}
+
+	public ZoneResponseBody ZoneResponseResult() {
 		ZoneResponseBody zoneResponse = new ZoneResponseBody();
 		List<Enum_zone> list = new ArrayList<>();
 		list = zoneInterface.findAll();
-		
+
 		JSONArray ja = new JSONArray();
-		
-		for(int i=0;i<list.size();i++) {
+
+		for (int i = 0; i < list.size(); i++) {
 			ja.add(list.get(i).getEnum_zone());
 		}
-		
+
 		zoneResponse.setJsonArray(ja);
 		return zoneResponse;
-
 	}
 	
-	@RequestMapping(value = "/getDistrictCategories", method = RequestMethod.GET, produces = "application/json")
-	public DistrictResponseBody method6() {
-		
+	public DistrictResponseBody DistrictResponseResult() {
+
 		DistrictResponseBody districtResponse = new DistrictResponseBody();
 		List<Enum_district> list = new ArrayList<>();
 		list = districtInterface.findAll();
-		
+
 		JSONArray ja = new JSONArray();
-		
-		for(int i=0;i<list.size();i++) {
+
+		for (int i = 0; i < list.size(); i++) {
 			ja.add(list.get(i).getEnum_district());
 		}
-		
 		districtResponse.setJsonArray(ja);
 		return districtResponse;
-
 	}
 	
-	@RequestMapping(value = "/getBothCategories", method = RequestMethod.GET, produces = "application/json")
-	public BothResponseBody method7() {
-		
-		BothResponseBody bothResponseBody = new BothResponseBody();
-		JSONObject obj = new JSONObject();
-		JSONObject obj1 = new JSONObject();
 
-		obj.put("zone", method5().getJsonArray());
-		obj1.put("district", method6().getJsonArray());
-		
-		List<JSONObject> list = new ArrayList<>();
-		
-		list.add(obj);
-		list.add(obj1);
-		
-		bothResponseBody.setJsonObject(list);
-		
-		return bothResponseBody;
-	}
+	
 
 }

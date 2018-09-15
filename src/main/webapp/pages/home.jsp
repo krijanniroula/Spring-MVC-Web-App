@@ -36,16 +36,9 @@
 				data : z,
 				type : "POST",
 				dataType : "json",
-				contentType : 'application/json'
-			});
-
-			$.ajax({
-				type : "GET",
-				url : "/getZoneCategories",
-				dataType : "json",
+				contentType : 'application/json',
 				success : function(data) {
 					console.log(data);
-
 					$.each(data, function(key, value) {
 						for (var i = 0; i < value.length; i++) {
 							$('#enum_zone').append(
@@ -65,13 +58,7 @@
 				data : z,
 				type : "POST",
 				dataType : "json",
-				contentType : 'application/json'
-			});
-
-			$.ajax({
-				type : "GET",
-				url : "/getDistrictCategories",
-				dataType : "json",
+				contentType : 'application/json',
 				success : function(data) {
 					console.log(data);
 
@@ -86,7 +73,7 @@
 				}
 			});
 		}
-		
+
 		function bothrequest() {
 			var z = '{"keyword":["zone","district"]}';
 			$.ajax({
@@ -94,38 +81,32 @@
 				data : z,
 				type : "POST",
 				dataType : "json",
-				contentType : 'application/json'
-			});
-
-			$.ajax({
-				type : "GET",
-				url : "/getBothCategories",
-				dataType : "json",
+				contentType : 'application/json',
 				success : function(data) {
 					console.log(data);
 
-					$.each(data,function(key1,body){
-						
+					$.each(data, function(key1, body) {
+
 						$.each(body[0], function(key, value) {
 							for (var i = 0; i < value.length; i++) {
 								$('#enum_zone').append(
-										'<option value="' + key + '">' + value[i]
-												+ '</option>');
+										'<option value="' + key + '">'
+												+ value[i] + '</option>');
 							}
 
 						}),
-						
+
 						$.each(body[1], function(key, value) {
 							for (var i = 0; i < value.length; i++) {
 								$('#enum_district').append(
-										'<option value="' + key + '">' + value[i]
-												+ '</option>');
+										'<option value="' + key + '">'
+												+ value[i] + '</option>');
 							}
 
 						});
-					
+
 					});
-					
+
 				}
 			});
 		}
