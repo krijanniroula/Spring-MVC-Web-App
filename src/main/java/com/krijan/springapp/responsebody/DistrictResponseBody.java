@@ -1,4 +1,4 @@
-package com.krijan.springapp.response;
+package com.krijan.springapp.responsebody;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

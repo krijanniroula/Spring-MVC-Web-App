@@ -1,4 +1,4 @@
-package com.krijan.springapp.controller;
+package com.krijan.springapp.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.krijan.springapp.POJOModel.Enum_district;
-import com.krijan.springapp.POJOModel.Enum_zone;
-import com.krijan.springapp.interfaces.DistrictInterface;
-import com.krijan.springapp.interfaces.ZoneInterface;
-import com.krijan.springapp.response.BothResponseBody;
-import com.krijan.springapp.response.DistrictResponseBody;
-import com.krijan.springapp.response.ZoneResponseBody;
+import com.krijan.springapp.componets.GetCategoriesComponent;
+import com.krijan.springapp.responsebody.BothResponseBody;
+import com.krijan.springapp.responsebody.DistrictResponseBody;
+import com.krijan.springapp.responsebody.ZoneResponseBody;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,12 +22,8 @@ import net.sf.json.JSONObject;
 public class GetCategoriesRestController {
 	
 	@Autowired
-	ZoneInterface zoneInterface;
-	
-	@Autowired
-	DistrictInterface districtInterface;
-	
-	
+	GetCategoriesComponent getCategoriesController;
+
 	@RequestMapping("/spring-app")
 	public ModelAndView method1() {
 
@@ -38,7 +31,6 @@ public class GetCategoriesRestController {
 		return model;
 	}
 	
-
 	@PostMapping(value = "/getZoneCategories")
 	public ZoneResponseBody method2(@RequestBody String getKeys) {
 
@@ -48,7 +40,7 @@ public class GetCategoriesRestController {
 
 		if (arr.toString().equals("[\"zone\"]")) {
 
-			return ZoneResponseResult();
+			return getCategoriesController.ZoneResponseResult();
 		} else {
 			return null;
 		}
@@ -63,7 +55,7 @@ public class GetCategoriesRestController {
 
 		if (arr.toString().equals("[\"district\"]")) {
 
-			return DistrictResponseResult();
+			return getCategoriesController.DistrictResponseResult();
 		} else {
 			return null;
 		}
@@ -81,8 +73,8 @@ public class GetCategoriesRestController {
 			JSONObject obj = new JSONObject();
 			JSONObject obj1 = new JSONObject();
 
-			obj.put("zone", ZoneResponseResult().getJsonArray());
-			obj1.put("district", DistrictResponseResult().getJsonArray());
+			obj.put("zone", getCategoriesController.ZoneResponseResult().getJsonArray());
+			obj1.put("district", getCategoriesController.DistrictResponseResult().getJsonArray());
 
 			List<JSONObject> list2 = new ArrayList<>();
 
@@ -97,38 +89,5 @@ public class GetCategoriesRestController {
 			return null;
 		}
 	}
-
-	public ZoneResponseBody ZoneResponseResult() {
-		ZoneResponseBody zoneResponse = new ZoneResponseBody();
-		List<Enum_zone> list = new ArrayList<>();
-		list = zoneInterface.findAll();
-
-		JSONArray ja = new JSONArray();
-
-		for (int i = 0; i < list.size(); i++) {
-			ja.add(list.get(i).getEnum_zone());
-		}
-
-		zoneResponse.setJsonArray(ja);
-		return zoneResponse;
-	}
-	
-	public DistrictResponseBody DistrictResponseResult() {
-
-		DistrictResponseBody districtResponse = new DistrictResponseBody();
-		List<Enum_district> list = new ArrayList<>();
-		list = districtInterface.findAll();
-
-		JSONArray ja = new JSONArray();
-
-		for (int i = 0; i < list.size(); i++) {
-			ja.add(list.get(i).getEnum_district());
-		}
-		districtResponse.setJsonArray(ja);
-		return districtResponse;
-	}
-	
-
-	
 
 }

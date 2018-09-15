@@ -1,4 +1,4 @@
-package com.krijan.springapp.POJOModel;
+package com.krijan.springapp.POJOModels;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
