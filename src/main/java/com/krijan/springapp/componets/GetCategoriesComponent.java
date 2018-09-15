@@ -54,8 +54,4 @@ public class GetCategoriesComponent {
 		districtResponse.setJsonArray(ja);
 		return districtResponse;
 	}
-	
-
-	
-
 }
