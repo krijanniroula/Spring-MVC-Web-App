@@ -3,6 +3,7 @@ package com.krijan.springapp.CRUD;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.krijan.springapp.POJOModels.Enum_district;
-import com.krijan.springapp.POJOModels.Enum_zone;
 import com.krijan.springapp.interfaces.DistrictInterface;
-import com.krijan.springapp.interfaces.ZoneInterface;
 
+@Controller
 public class DistrictCrudOperation {
 	@Autowired
 	private DistrictInterface districtInterface;
@@ -26,17 +26,18 @@ public class DistrictCrudOperation {
 		return districtInterface.findAll();
 	}
 	
-	@DeleteMapping("/zones/{enum_district}")
+	@DeleteMapping("/districts/{enum_district}")
+	@ResponseBody
 	public void deleteStudent(@PathVariable String enum_district) {
 		districtInterface.deleteById(enum_district);
 	}
 	
-	@PostMapping("/zones")
+	@PostMapping("/districts")
 	public void createStudent(@RequestBody Enum_district enum_district) {
 		districtInterface.save(enum_district);
 
 	}
-	@PutMapping("/zones/{enum_district}")
+	@PutMapping("/districts/{enum_district}")
 	public void updateZone(@RequestBody Enum_district district, @PathVariable String enum_district) {
 
 		districtInterface.findById(enum_district);

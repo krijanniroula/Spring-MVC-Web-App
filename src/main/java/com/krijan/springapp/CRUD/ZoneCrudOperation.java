@@ -28,16 +28,19 @@ public class ZoneCrudOperation {
 	}
 	
 	@DeleteMapping("/zones/{enum_zone}")
+	@ResponseBody
 	public void deleteStudent(@PathVariable String enum_zone) {
 		zoneInterface.deleteById(enum_zone);
 	}
 	
 	@PostMapping("/zones")
+	@ResponseBody
 	public void createStudent(@RequestBody Enum_zone enum_zone) {
 			zoneInterface.save(enum_zone);
 
 	}
 	@PutMapping("/zones/{enum_zone}")
+	@ResponseBody
 	public void updateZone(@RequestBody Enum_zone zone, @PathVariable String enum_zone) {
 
 		zoneInterface.findById(enum_zone);
